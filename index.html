@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Transparent Overlay on Satellite</title>
+ 
+    <!-- 📦 LEAFLET CSS — REQUIRED for map styling (markers, controls, tiles) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+ 
+    <!-- 🎨 CUSTOM STYLES -->
+    <style>
+        /* Make map fill entire browser window */
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+ 
+        /* Style for the opacity control panel (top-right corner) */
+        .control-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;           /* Ensure it appears above the map */
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: Arial, sans-serif;
+        }
+ 
+        .control-panel label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+ 
+        .control-panel input[type="range"] {
+            width: 100%;             /* Make slider fill container width */
+        }
+    </style>
+</head>
+<body>
+    <!-- 🗺️ This is where Leaflet will render the map -->
+    <div id="map"></div>
+ 
+    <!-- 🎚️ Control panel for adjusting tile opacity -->
+    <div class="control-panel">
+        <label>Overlay Opacity: <span id="opacity-val">0.70</span></label>
+        <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="0.7">
+    </div>
+ 
+    <!-- 📦 LEAFLET JS — Core library for interactive maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ 
+    <!-- 🧠 MAP LOGIC -->
+    <script>
+        /*
+         * 🌍 INITIALIZE THE MAP
+         * Set the starting view: center coordinates and zoom level.
+         * Since your tiles are in zoom levels 10–12, start at zoom 11.
+         * Replace [lat, lng] with the center of your area of interest.
+         */
+        const map = L.map('map', {
+            center: [22.877749422835198, -102.53986244112079],  // 📍 EXAMPLE: New York City — REPLACE THIS!
+            zoom: 11,                      // 🔍 Start zoom level (you have tiles for z10, z11, z12)
+            minZoom: 10,                   // 🚫 Don’t zoom out beyond level 10 (no tiles below this)
+            maxZoom: 19                    // 🚫 Don’t zoom in beyond level 12 (no tiles above this)
+        });
+ 
+        /*
+         * 🖼️ ADD SATELLITE BASE LAYER
+         * This is the background imagery (from Esri) — free for non-commercial use.
+         * Your transparent PNG tiles will overlay on top of this.
+         */
+        L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            {
+                attribution: 'Tiles © Esri, Maxar, Earthstar Geographics'  // Required by license
+            }
+        ).addTo(map);
+ 
+        /*
+         * 🖼️ OVERLAY YOUR PNG TILES
+         * Your tiles are in the repo ROOT: /10/x/y.png, /11/x/y.png, etc.
+         * So the URL pattern is: https://<username>.github.io/<repo>/{z}/{x}/{y}.png
+         * ⚠️ IMPORTANT: If your tiles use TMS (Y=0 at bottom), add: tms: true
+         */
+        const overlay = L.tileLayer(
+            'https://jaywenbaorcenperez-commits.github.io/Panuco-Zac-Map-1968/{z}/{x}/{y}.png', // 🔧 REPLACE THIS!
+            {
+                opacity: 0.6,        // 💧 Default transparency (0 = invisible, 1 = fully opaque)
+                minZoom: 10,         // Match your lowest zoom folder
+                maxZoom: 19,         // Match your highest zoom folder
+                attribution: 'My Custom Overlay'  // Optional — credit yourself or source
+            }
+        ).addTo(map);
+ 
+        /*
+         * 🎚️ OPACITY SLIDER CONTROL
+         * Lets users drag the slider to adjust tile transparency in real-time.
+         * Great for comparing your overlay with satellite imagery underneath.
+         */
+        const slider = document.getElementById('opacity-slider');   // Get slider element
+        const valDisplay = document.getElementById('opacity-val');  // Get text display element
+ 
+        // When user moves slider → update tile opacity + display value
+        slider.addEventListener('input', function() {
+            const opacity = parseFloat(this.value);   // Get slider value (0.00 to 1.00)
+            overlay.setOpacity(opacity);              // Apply to tile layer
+            valDisplay.textContent = opacity.toFixed(2); // Update displayed number (e.g., "0.70")
+        });
+ 
+        /*
+         * 🧭 OPTIONAL: FIT MAP TO KNOWN BOUNDS (if you know the geographic extent)
+         * Example:
+         * map.fitBounds([[southWestLat, southWestLng], [northEastLat, northEastLng]]);
+         */
+    </script>
+</body>
+</html>
