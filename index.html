@@ -48,7 +48,7 @@
  
     <!-- 🎚️ Control panel for adjusting tile opacity -->
     <div class="control-panel">
-        <label>Overlay Opacity: <span id="opacity-val">0.70</span></label>
+        <label>Overlay Opacity: <span id="opacity-val">0.60</span></label>
         <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="0.7">
     </div>
  
@@ -66,7 +66,7 @@
         const map = L.map('map', {
             center: [22.877749422835198, -102.53986244112079],  // 📍 EXAMPLE: New York City — REPLACE THIS!
             zoom: 11,                      // 🔍 Start zoom level (you have tiles for z10, z11, z12)
-            minZoom: 10,                   // 🚫 Don’t zoom out beyond level 10 (no tiles below this)
+            minZoom: 11,                   // 🚫 Don’t zoom out beyond level 10 (no tiles below this)
             maxZoom: 19                    // 🚫 Don’t zoom in beyond level 12 (no tiles above this)
         });
  
@@ -92,7 +92,7 @@
             'https://panucozac1968.github.io/PanucoZac1968/', // 🔧 REPLACE THIS!
             {
                 opacity: 0.6,        // 💧 Default transparency (0 = invisible, 1 = fully opaque)
-                minZoom: 10,         // Match your lowest zoom folder
+                minZoom: 11,         // Match your lowest zoom folder
                 maxZoom: 19,         // Match your highest zoom folder
                 attribution: 'My Custom Overlay'  // Optional — credit yourself or source
             }
