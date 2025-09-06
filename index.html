@@ -65,7 +65,7 @@
          */
         const map = L.map('map', {
             center: [22.877749422835198, -102.53986244112079],  // 📍 EXAMPLE: New York City — REPLACE THIS!
-            zoom: 11,                      // 🔍 Start zoom level (you have tiles for z10, z11, z12)
+            zoom: 10,                      // 🔍 Start zoom level (you have tiles for z10, z11, z12)
             minZoom: 11,                   // 🚫 Don’t zoom out beyond level 10 (no tiles below this)
             maxZoom: 19                    // 🚫 Don’t zoom in beyond level 12 (no tiles above this)
         });
@@ -92,7 +92,7 @@
             'https://panucozac1968.github.io/PanucoZac1968/{z}/{x}/{y}.png', // 🔧 REPLACE THIS!
             {
                 opacity: 0.6,        // 💧 Default transparency (0 = invisible, 1 = fully opaque)
-                minZoom: 11,         // Match your lowest zoom folder
+                minZoom: 10,         // Match your lowest zoom folder
                 maxZoom: 19,         // Match your highest zoom folder
                 attribution: 'My Custom Overlay'  // Optional — credit yourself or source
             }
